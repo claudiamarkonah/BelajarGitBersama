@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar Git - Claudia Markonah</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Header / Navigation -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-900">Claudia's Git Lab</h1>
+      <nav class="space-x-4 text-sm text-gray-600">
+        <a href="#home" class="hover:text-indigo-600 transition">Home</a>
+        <a href="#calculator" class="hover:text-indigo-600 transition">Calculator</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero / Landing Section -->
+  <main class="max-w-4xl mx-auto px-4 py-10 flex-grow w-full">
+    <section id="home" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center md:text-left md:flex items-center gap-8 mb-10">
+      <div class="w-24 h-24 mx-auto md:mx-0 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-3xl flex-shrink-0 mb-4 md:mb-0">
+        🚀
+      </div>
+      <div>
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Belajar Git & Web Dev</h2>
+        <p class="text-gray-600 leading-relaxed">
+          Selamat datang di halaman latihan Git! Halaman ini dibuat untuk mempraktikkan alur kerja Git (commit, branch, merge) sekaligus mencoba membuat komponen interaktif sederhana.
+        </p>
+      </div>
+    </section>
+
+    <!-- Simple Calculator Section -->
+    <section id="calculator" class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+      <h3 class="text-xl font-bold text-gray-900 text-center mb-4">🧮 Simple Calculator</h3>
+      
+      <!-- Screen Display -->
+      <div id="display" class="w-full bg-gray-900 text-white text-right text-3xl font-mono p-4 rounded-xl mb-4 overflow-x-auto min-h-[60px] flex items-center justify-end">
+        0
+      </div>
+
+      <!-- Calculator Buttons -->
+      <div class="grid grid-cols-4 gap-2">
+        <!-- Row 1 -->
+        <button onclick="clearDisplay()" class="col-span-2 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg transition">AC</button>
+        <button onclick="appendOperator('/')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition">÷</button>
+        <button onclick="appendOperator('*')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition">×</button>
+
+        <!-- Row 2 -->
+        <button onclick="appendNumber('7')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">7</button>
+        <button onclick="appendNumber('8')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">8</button>
+        <button onclick="appendNumber('9')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">9</button>
+        <button onclick="appendOperator('-')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition">-</button>
+
+        <!-- Row 3 -->
+        <button onclick="appendNumber('4')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">4</button>
+        <button onclick="appendNumber('5')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">5</button>
+        <button onclick="appendNumber('6')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">6</button>
+        <button onclick="appendOperator('+')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition">+</button>
+
+        <!-- Row 4 -->
+        <button onclick="appendNumber('1')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">1</button>
+        <button onclick="appendNumber('2')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">2</button>
+        <button onclick="appendNumber('3')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">3</button>
+        <button onclick="calculateResult()" class="row-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg transition flex items-center justify-center">=</button>
+
+        <!-- Row 5 -->
+        <button onclick="appendNumber('0')" class="col-span-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">0</button>
+        <button onclick="appendNumber('.')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg transition">.</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
+    <p>© 2026 Claudia Markonah • Project Belajar Git</p>
+  </footer>
+
+  <!-- Calculator Logic Script -->
+  <script>
+    let display = document.getElementById('display');
+    let currentInput = '';
+
+    function appendNumber(num) {
+      if (currentInput === '0' && num !== '.') {
+        currentInput = num;
+      } else {
+        currentInput += num;
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      if (currentInput === '' && op !== '-') return;
+      const lastChar = currentInput.slice(-1);
+      if (['+', '-', '*', '/'].includes(lastChar)) {
+        currentInput = currentInput.slice(0, -1) + op;
+      } else {
+        currentInput += op;
+      }
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      currentInput = '';
+      updateDisplay();
+    }
+
+    function calculateResult() {
+      try {
+        if (currentInput === '') return;
+        // Evaluate the calculation safely
+        let result = Function('"use strict"; return (' + currentInput + ')')();
+        currentInput = String(result);
+        updateDisplay();
+      } catch (error) {
+        display.innerText = 'Error';
+        currentInput = '';
+      }
+    }
+
+    function updateDisplay() {
+      display.innerText = currentInput || '0';
+    }
+  </script>
+
+</body>
+</html>
